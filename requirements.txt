@@ -1,0 +1,4 @@
+Flask==2.0.3
+SpeechRecognition==3.8.1
+PyDub==0.25.1
+Werkzeug==2.0.3
