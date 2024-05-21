@@ -1,9 +1,10 @@
 from flask import Flask, request, render_template, redirect, url_for
 import os
 from speech_recognizer import recognize_speech_from_audio
-import tempfile
 
 app = Flask(__name__)
+UPLOAD_FOLDER = 'uploads'
+app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
 @app.route('/')
 def index():
@@ -19,7 +20,7 @@ def upload_file():
         return redirect(request.url)
     
     if file:
-        with tempfile.NamedTemporaryFile(delete=False) as temp_file:
-            file.save(temp_file.name)
-            text = recognize_speech_from_audio(temp_file.name)
+        file_path = os.path.join(app.config['UPLOAD_FOLDER'], file.filename)
+        file.save(file_path)
+        text = recognize_speech_from_audio(file_path)
         return render_template('result.html', transcription=text)
