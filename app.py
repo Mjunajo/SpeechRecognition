@@ -4,7 +4,7 @@ import logging
 from speech_recognizer import recognize_speech_from_audio
 
 app = Flask(__name__)
-UPLOAD_FOLDER = 'uploads'
+UPLOAD_FOLDER = '/tmp/uploads'
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
 # Configure logging
@@ -28,6 +28,7 @@ def upload_file():
     if file:
         try:
             file_path = os.path.join(app.config['UPLOAD_FOLDER'], file.filename)
+            os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
             file.save(file_path)
             text = recognize_speech_from_audio(file_path)
             return render_template('result.html', transcription=text)
