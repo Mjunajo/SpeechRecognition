@@ -41,7 +41,10 @@
             word-wrap: break-word;
             color: #fff;
         }
-        a {
+        .actions {
+            margin-top: 1em;
+        }
+        .btn {
             display: inline-block;
             margin-top: 1em;
             text-decoration: none;
@@ -50,8 +53,9 @@
             padding: 0.75em 1.5em;
             border-radius: 4px;
             transition: background-color 0.3s ease;
+            margin-right: 1em;
         }
-        a:hover {
+        .btn:hover {
             background-color: #e6b800;
         }
     </style>
@@ -62,7 +66,10 @@
         <div class="transcription">
             {{ transcription }}
         </div>
-        <a href="{{ url_for('index') }}">Upload Another File</a>
+        <div class="actions">
+            <a class="btn" href="{{ url_for('download_file', filename=transcription_file) }}">Download Transcription</a>
+            <a class="btn" href="{{ url_for('index') }}">Upload Another File</a>
+        </div>
     </div>
 </body>
 </html>
