@@ -3,6 +3,14 @@ import replicate
 from pydub import AudioSegment
 
 def recognize_speech_from_audio(audio_file_path):
+    # Ensure API token is set
+    replicate_api_token = os.getenv('REPLICATE_API_TOKEN')
+    if not replicate_api_token:
+        raise ValueError("Replicate API token not set")
+    
+    # Set the Replicate API token
+    replicate.Client(api_token=replicate_api_token)
+    
     # Convert MP3 to WAV if necessary
     if audio_file_path.lower().endswith('.mp3'):
         audio = AudioSegment.from_mp3(audio_file_path)
