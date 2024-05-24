@@ -35,13 +35,8 @@ def recognize_speech_from_audio(audio_file_path):
     # Handle response dynamically
     if isinstance(prediction, str):
         logging.warning("Received a string object instead of a prediction object")
+        logging.warning(f"Response content: {prediction}")
         return "Could not transcribe the audio"
-    
-    prediction_id = getattr(prediction, 'id', None)
-    if prediction_id:
-        logging.debug(f"Prediction ID: {prediction_id}")
-    else:
-        logging.warning("Prediction ID not found in the response")
 
     # Poll the API to get the result
     while prediction.status not in ["succeeded", "failed"]:
