@@ -1,23 +1,24 @@
-import speech_recognition as sr
+import os
+import replicate
+from pydub import AudioSegment
 
 def recognize_speech_from_audio(audio_file_path):
-    # Initialize the recognizer
-    recognizer = sr.Recognizer()
+    # Convert MP3 to WAV if necessary
+    if audio_file_path.lower().endswith('.mp3'):
+        audio = AudioSegment.from_mp3(audio_file_path)
+        audio_file_path = audio_file_path.replace('.mp3', '.wav')
+        audio.export(audio_file_path, format='wav')
 
-    # Load the audio file
-    with sr.AudioFile(audio_file_path) as source:
-        audio_data = recognizer.record(source)
-    
-    # Recognize (convert from speech to text)
-    try:
-        text = recognizer.recognize_google(audio_data)
-        return text
-    except sr.UnknownValueError:
-        return "Speech Recognition could not understand audio"
-    except sr.RequestError as e:
-        return f"Could not request results; {e}"
+    # Upload audio file to Replicate
+    with open(audio_file_path, 'rb') as f:
+        model_input = {"audio": f}
+        output = replicate.run(
+            "openai/whisper:4d50797290df275329f202e48c76360b3f22b08d28c196cbc54600319435f8d2",
+            input=model_input
+        )
 
-# Example usage (for testing)
-if __name__ == "__main__":
-    audio_path = "path_to_your_audio_file.wav"  # Replace with your audio file path
-    print(recognize_speech_from_audio(audio_path))
+    if output and "segments" in output:
+        transcription = " ".join([segment["text"] for segment in output["segments"]])
+        return transcription
+    else:
+        return "Could not transcribe the audio"
