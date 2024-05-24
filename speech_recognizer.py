@@ -1,19 +1,10 @@
 import os
 import replicate
 from pydub import AudioSegment
-from pydub.utils import which
 import logging
 
 # Set up logging
 logging.basicConfig(level=logging.DEBUG)
-
-# Set path to the local ffmpeg and ffprobe binaries
-ffmpeg_path = os.path.join(os.path.dirname(__file__), 'bin', 'ffmpeg')
-ffprobe_path = os.path.join(os.path.dirname(__file__), 'bin', 'ffprobe')
-
-# Set pydub to use these binaries
-AudioSegment.converter = ffmpeg_path
-AudioSegment.ffprobe = ffprobe_path
 
 def recognize_speech_from_audio(audio_file_path):
     # Ensure API token is set
@@ -37,6 +28,13 @@ def recognize_speech_from_audio(audio_file_path):
             version="openai/whisper:4d50797290df275329f202e48c76360b3f22b08d28c196cbc54600319435f8d2",
             input=model_input
         )
+
+    # Handle response dynamically
+    prediction_id = getattr(prediction, 'id', None)
+    if prediction_id:
+        logging.debug(f"Prediction ID: {prediction_id}")
+    else:
+        logging.warning("Prediction ID not found in the response")
 
     # Poll the API to get the result
     while prediction.status not in ["succeeded", "failed"]:
