@@ -29,7 +29,14 @@ def recognize_speech_from_audio(audio_file_path):
             input=model_input
         )
 
+    # Log the entire prediction object for debugging
+    logging.debug(f"Prediction object: {prediction}")
+
     # Handle response dynamically
+    if isinstance(prediction, str):
+        logging.warning("Received a string object instead of a prediction object")
+        return "Could not transcribe the audio"
+    
     prediction_id = getattr(prediction, 'id', None)
     if prediction_id:
         logging.debug(f"Prediction ID: {prediction_id}")
