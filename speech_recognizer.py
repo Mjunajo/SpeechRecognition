@@ -33,7 +33,11 @@ def recognize_speech_from_audio(audio_file_path):
     logging.debug(f"Prediction object: {prediction}")
 
     # Handle response
-    if prediction.status == "succeeded" and prediction.output and "segments" in prediction.output:
+    if isinstance(prediction, str):
+        logging.warning("Received a string object instead of a prediction object")
+        logging.warning(f"Response content: {prediction}")
+        return "Could not transcribe the audio"
+    elif prediction.status == "succeeded" and prediction.output and "segments" in prediction.output:
         transcription = " ".join([segment["text"] for segment in prediction.output["segments"]])
         return transcription
     elif prediction.status == "failed" and prediction.error:
