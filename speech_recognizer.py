@@ -32,21 +32,14 @@ def recognize_speech_from_audio(audio_file_path):
     # Log the entire prediction object for debugging
     logging.debug(f"Prediction object: {prediction}")
 
-    # Handle response dynamically
-    if isinstance(prediction, str):
-        logging.warning("Received a string object instead of a prediction object")
-        logging.warning(f"Response content: {prediction}")
-        return "Could not transcribe the audio"
-
-    # Poll the API to get the result
-    while prediction.status not in ["succeeded", "failed"]:
-        prediction.reload()
-    
-    # Log the output for debugging
-    logging.debug(f"Replicate API output: {prediction}")
-
+    # Handle response
     if prediction.status == "succeeded" and prediction.output and "segments" in prediction.output:
         transcription = " ".join([segment["text"] for segment in prediction.output["segments"]])
         return transcription
+    elif prediction.status == "failed" and prediction.error:
+        logging.error(f"Prediction failed with error: {prediction.error}")
+        return "Could not transcribe the audio"
     else:
+        logging.warning("Unexpected response from Replicate API")
+        logging.warning(f"Response content: {prediction}")
         return "Could not transcribe the audio"
