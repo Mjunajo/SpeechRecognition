@@ -7,8 +7,9 @@ from pydub.utils import which
 ffmpeg_path = os.path.join(os.path.dirname(__file__), 'bin', 'ffmpeg')
 ffprobe_path = os.path.join(os.path.dirname(__file__), 'bin', 'ffprobe')
 
-AudioSegment.converter = which(ffmpeg_path)
-AudioSegment.ffprobe = which(ffprobe_path)
+# Set pydub to use these binaries
+AudioSegment.converter = ffmpeg_path
+AudioSegment.ffprobe = ffprobe_path
 
 def recognize_speech_from_audio(audio_file_path):
     # Ensure API token is set
@@ -32,6 +33,9 @@ def recognize_speech_from_audio(audio_file_path):
             "openai/whisper:4d50797290df275329f202e48c76360b3f22b08d28c196cbc54600319435f8d2",
             input=model_input
         )
+
+    # Log the output for debugging
+    print(output)
 
     if output and "segments" in output:
         transcription = " ".join([segment["text"] for segment in output["segments"]])
