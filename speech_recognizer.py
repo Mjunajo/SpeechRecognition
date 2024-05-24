@@ -37,6 +37,10 @@ def recognize_speech_from_audio(audio_file_path):
         logging.warning("Received a string object instead of a prediction object")
         logging.warning(f"Response content: {prediction}")
         return "Could not transcribe the audio"
+    elif not hasattr(prediction, 'status'):
+        logging.warning("Response object does not have 'status' attribute")
+        logging.warning(f"Response content: {prediction}")
+        return "Could not transcribe the audio"
     elif prediction.status == "succeeded" and prediction.output and "segments" in prediction.output:
         transcription = " ".join([segment["text"] for segment in prediction.output["segments"]])
         return transcription
