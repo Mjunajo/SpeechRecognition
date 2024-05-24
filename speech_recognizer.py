@@ -41,11 +41,11 @@ def recognize_speech_from_audio(audio_file_path):
         logging.warning("Response object does not have 'status' attribute")
         logging.warning(f"Response content: {prediction}")
         return "Could not transcribe the audio"
-    elif prediction.status == "succeeded" and prediction.output and "segments" in prediction.output:
-        transcription = " ".join([segment["text"] for segment in prediction.output["segments"]])
+    elif prediction.get("status") == "succeeded" and prediction.get("output") and "segments" in prediction["output"]:
+        transcription = " ".join([segment["text"] for segment in prediction["output"]["segments"]])
         return transcription
-    elif prediction.status == "failed" and prediction.error:
-        logging.error(f"Prediction failed with error: {prediction.error}")
+    elif prediction.get("status") == "failed" and prediction.get("error"):
+        logging.error(f"Prediction failed with error: {prediction['error']}")
         return "Could not transcribe the audio"
     else:
         logging.warning("Unexpected response from Replicate API")
