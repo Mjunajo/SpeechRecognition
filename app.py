@@ -18,6 +18,7 @@ def index():
 
 @app.route('/upload', methods=['POST'])
 def upload_file():
+    app.logger.debug('Upload route called')
     if 'file' not in request.files:
         app.logger.error('No file part')
         return redirect(request.url)
@@ -32,6 +33,7 @@ def upload_file():
             file_path = os.path.join(app.config['UPLOAD_FOLDER'], file.filename)
             os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
             file.save(file_path)
+            app.logger.debug(f'File saved to {file_path}')
 
             # Recognize speech and save the transcription to a text file
             text = recognize_speech_from_audio(file_path)
@@ -40,6 +42,7 @@ def upload_file():
             os.makedirs(app.config['DOWNLOAD_FOLDER'], exist_ok=True)
             with open(transcription_path, 'w') as f:
                 f.write(text)
+            app.logger.debug(f'Transcription saved to {transcription_path}')
 
             return render_template('result.html', transcription=text, transcription_file=transcription_file)
         except Exception as e:
