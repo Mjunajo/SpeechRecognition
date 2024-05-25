@@ -7,10 +7,9 @@
     <style>
         body {
             font-family: 'Arial', sans-serif;
-            background-image: url('Carbon_Fiber_Background.jpg');
+            background: url('Carbon_Fiber_Background.jpg') no-repeat center center fixed;
             background-size: cover;
-            background-position: center;
-            color: #fff;
+            color: #333;
             display: flex;
             justify-content: center;
             align-items: center;
@@ -18,7 +17,7 @@
             margin: 0;
         }
         .container {
-            background-color: rgba(0, 0, 0, 0.7);
+            background-color: rgba(255, 255, 255, 0.8);
             padding: 2em;
             box-shadow: 0 4px 8px rgba(0,0,0,0.1);
             border-radius: 8px;
@@ -27,36 +26,30 @@
             width: 100%;
         }
         h1 {
-            color: #ffcc00;
+            color: #007bff;
             margin-bottom: 1em;
-            font-size: 2em;
         }
         .transcription {
             text-align: left;
             margin-top: 1em;
-            background-color: rgba(255, 255, 255, 0.1);
+            background-color: #f1f1f1;
             padding: 1em;
             border-radius: 4px;
             white-space: pre-wrap;
             word-wrap: break-word;
-            color: #fff;
         }
-        .actions {
-            margin-top: 1em;
-        }
-        .btn {
+        a {
             display: inline-block;
             margin-top: 1em;
             text-decoration: none;
-            color: #333;
-            background-color: #ffcc00;
+            color: white;
+            background-color: #007bff;
             padding: 0.75em 1.5em;
             border-radius: 4px;
             transition: background-color 0.3s ease;
-            margin-right: 1em;
         }
-        .btn:hover {
-            background-color: #e6b800;
+        a:hover {
+            background-color: #0056b3;
         }
     </style>
 </head>
@@ -66,10 +59,7 @@
         <div class="transcription">
             {{ transcription }}
         </div>
-        <div class="actions">
-            <a class="btn" href="{{ url_for('download_file', filename=transcription_file) }}">Download Transcription</a>
-            <a class="btn" href="{{ url_for('index') }}">Upload Another File</a>
-        </div>
+        <a href="{{ url_for('index') }}">Upload Another File</a>
     </div>
 </body>
 </html>
