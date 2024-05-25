@@ -49,11 +49,17 @@ def recognize_speech_from_audio(audio_file_path):
         audio_file_path = audio_file_path.replace('.mp3', '.wav')
         audio.export(audio_file_path, format='wav')
 
+    # Log the file path being processed
+    logging.debug(f"Processing audio file: {audio_file_path}")
+
+    # Define the model version explicitly
+    version = client.models.get("openai/whisper").versions.get("4d50797290df275329f202e48c76360b3f22b08d28c196cbc54600319435f8d2")
+
     # Upload audio file to Replicate
     with open(audio_file_path, 'rb') as f:
         model_input = {"audio": f}
         prediction = client.predictions.create(
-            version="openai/whisper:4d50797290df275329f202e48c76360b3f22b08d28c196cbc54600319435f8d2",
+            version=version,
             input=model_input
         )
 
