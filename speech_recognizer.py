@@ -32,22 +32,48 @@ def recognize_speech_from_audio(audio_file_path):
     # Log the entire prediction object for debugging
     logging.debug(f"Prediction object: {prediction}")
 
-    # Handle response
+    # Ensure the prediction object is a dictionary
     if isinstance(prediction, str):
         logging.warning("Received a string object instead of a prediction object")
         logging.warning(f"Response content: {prediction}")
         return "Could not transcribe the audio"
-    elif not hasattr(prediction, 'status'):
+
+    if not isinstance(prediction, dict):
+        logging.error("Prediction object is not a dictionary")
+        logging.error(f"Unexpected response type: {type(prediction)}")
+        logging.error(f"Response content: {prediction}")
+        return "Could not transcribe the audio"
+
+    # Handle response
+    status = prediction.get('status')
+    if not status:
         logging.warning("Response object does not have 'status' attribute")
         logging.warning(f"Response content: {prediction}")
         return "Could not transcribe the audio"
-    elif prediction.get("status") == "succeeded" and prediction.get("output") and "segments" in prediction["output"]:
-        transcription = " ".join([segment["text"] for segment in prediction["output"]["segments"]])
-        return transcription
-    elif prediction.get("status") == "failed" and prediction.get("error"):
-        logging.error(f"Prediction failed with error: {prediction['error']}")
-        return "Could not transcribe the audio"
+
+    if status == "succeeded":
+        output = prediction.get('output')
+        if output and isinstance(output, dict) and "segments" in output:
+            transcription = " ".join([segment["text"] for segment in output["segments"]])
+            return transcription
+        else:
+            logging.warning("Output is missing or not in expected format")
+            logging.warning(f"Output content: {output}")
+            return "Could not transcribe the audio"
+    elif status == "failed":
+        error_message = prediction.get('error')
+        if error_message:
+            logging.error(f"Prediction failed with error: {error_message}")
+            return "Could not transcribe the audio"
+        else:
+            logging.warning("Prediction failed without an error message")
+            return "Could not transcribe the audio"
     else:
-        logging.warning("Unexpected response from Replicate API")
+        logging.warning("Unexpected response status from Replicate API")
         logging.warning(f"Response content: {prediction}")
         return "Could not transcribe the audio"
+
+# Example usage (for testing)
+if __name__ == "__main__":
+    audio_path = "path_to_your_audio_file.mp3"  # Replace with your audio file path
+    print(recognize_speech_from_audio(audio_path))
