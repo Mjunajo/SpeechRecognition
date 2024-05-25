@@ -22,48 +22,37 @@ def recognize_speech_from_audio(audio_file_path):
         audio.export(audio_file_path, format='wav')
 
     # Upload audio file to Replicate
-    with open(audio_file_path, 'rb') as f:
-        model_input = {"audio": f}
-        prediction = client.predictions.create(
-            version="openai/whisper:4d50797290df275329f202e48c76360b3f22b08d28c196cbc54600319435f8d2",
-            input=model_input
-        )
+    try:
+        with open(audio_file_path, 'rb') as f:
+            model_input = {"audio": f}
+            prediction = client.predictions.create(
+                version="openai/whisper:4d50797290df275329f202e48c76360b3f22b08d28c196cbc54600319435f8d2",
+                input=model_input
+            )
+    except Exception as e:
+        logging.error(f"Error uploading audio file to Replicate: {e}")
+        return "Could not transcribe the audio"
 
     # Log the entire prediction object for debugging
     logging.debug(f"Prediction object: {prediction}")
 
-    # Ensure the prediction object is a dictionary
-    if isinstance(prediction, str):
-        logging.warning("Received a string object instead of a prediction object")
-        logging.warning(f"Response content: {prediction}")
-        return "Could not transcribe the audio"
-
-    if not isinstance(prediction, dict):
-        logging.error("Prediction object is not a dictionary")
-        logging.error(f"Unexpected response type: {type(prediction)}")
-        logging.error(f"Response content: {prediction}")
-        return "Could not transcribe the audio"
-
     # Handle response
-    status = prediction.get('status')
-    if not status:
+    if not hasattr(prediction, 'status'):
         logging.warning("Response object does not have 'status' attribute")
         logging.warning(f"Response content: {prediction}")
         return "Could not transcribe the audio"
 
-    if status == "succeeded":
-        output = prediction.get('output')
-        if output and isinstance(output, dict) and "segments" in output:
-            transcription = " ".join([segment["text"] for segment in output["segments"]])
+    if prediction.status == "succeeded":
+        if hasattr(prediction, 'output') and isinstance(prediction.output, dict) and "segments" in prediction.output:
+            transcription = " ".join([segment["text"] for segment in prediction.output["segments"]])
             return transcription
         else:
             logging.warning("Output is missing or not in expected format")
-            logging.warning(f"Output content: {output}")
+            logging.warning(f"Output content: {prediction.output}")
             return "Could not transcribe the audio"
-    elif status == "failed":
-        error_message = prediction.get('error')
-        if error_message:
-            logging.error(f"Prediction failed with error: {error_message}")
+    elif prediction.status == "failed":
+        if hasattr(prediction, 'error'):
+            logging.error(f"Prediction failed with error: {prediction.error}")
             return "Could not transcribe the audio"
         else:
             logging.warning("Prediction failed without an error message")
