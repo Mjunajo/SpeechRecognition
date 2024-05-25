@@ -6,6 +6,10 @@ app = Flask(__name__)
 UPLOAD_FOLDER = 'uploads'
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
+# Ensure the uploads directory exists
+if not os.path.exists(UPLOAD_FOLDER):
+    os.makedirs(UPLOAD_FOLDER)
+
 @app.route('/')
 def index():
     return render_template('index.html')
@@ -20,6 +24,10 @@ def upload_file():
         return redirect(request.url)
 
     if file:
+        # Ensure the uploads directory exists
+        if not os.path.exists(app.config['UPLOAD_FOLDER']):
+            os.makedirs(app.config['UPLOAD_FOLDER'])
+
         file_path = os.path.join(app.config['UPLOAD_FOLDER'], file.filename)
         file.save(file_path)
         text = recognize_speech_from_audio(file_path)
