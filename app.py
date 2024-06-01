@@ -26,3 +26,5 @@ def transcribe_audio():
         return render_template('result.html', transcription=text)
 
     return redirect(url_for('index'))
+
+
