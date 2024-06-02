@@ -18,7 +18,7 @@ class Prediction(BaseModel):
 def convert_audio_to_text(file_path):
     model = replicate.Client(api_token=REPLICATE_API_TOKEN)
     try:
-        # Read audio file as bytes
+        # Read audio file as bytes with specified encoding
         with open(file_path, "rb") as audio_file:
             audio_data = audio_file.read()
 
