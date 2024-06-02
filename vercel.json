@@ -1,4 +1,5 @@
 {
+  "version": 2,
   "builds": [
     {
       "src": "app.py",
@@ -10,8 +11,5 @@
       "src": "/(.*)",
       "dest": "app.py"
     }
-  ],
-  "scripts": {
-    "postinstall": "apt-get update && apt-get install -y ffmpeg"
-  }
+  ]
 }
