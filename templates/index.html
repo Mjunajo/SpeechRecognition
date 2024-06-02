@@ -3,53 +3,55 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Audio to Text Converter</title>
+    <title>Audio to Text</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
     <style>
         body {
+            background-color: #f8f9fa;
             font-family: Arial, sans-serif;
-            background-color: #f4f4f9;
-            color: #333;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            margin: 0;
         }
         .container {
-            background: #fff;
-            padding: 2rem;
+            margin-top: 50px;
+        }
+        .card {
+            padding: 20px;
             border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            text-align: center;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
         }
-        h1 {
-            margin-bottom: 1.5rem;
-            color: #007BFF;
-        }
-        input[type="file"] {
-            margin-bottom: 1rem;
-        }
-        button {
-            background-color: #007BFF;
+        .btn-upload {
+            background-color: #007bff;
             color: white;
-            padding: 0.5rem 1rem;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
+            margin-top: 20px;
         }
-        button:hover {
+        .btn-upload:hover {
             background-color: #0056b3;
+        }
+        .footer {
+            margin-top: 50px;
+            text-align: center;
+            color: #6c757d;
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>Audio to Text Converter</h1>
-        <form action="/upload" method="post" enctype="multipart/form-data">
-            <input type="file" name="file" accept=".wav, .mp3, .ogg" required>
-            <br>
-            <button type="submit">Upload and Convert</button>
-        </form>
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+                <div class="card">
+                    <h2 class="text-center">Upload Audio File</h2>
+                    <form action="/upload" method="post" enctype="multipart/form-data">
+                        <div class="form-group">
+                            <input type="file" name="file" accept=".wav, .mp3" class="form-control-file">
+                        </div>
+                        <button type="submit" class="btn btn-upload btn-block">Upload</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="footer">
+        <p>&copy; 2024 Audio to Text Converter</p>
     </div>
 </body>
 </html>
