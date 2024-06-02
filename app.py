@@ -30,3 +30,4 @@ def upload_file():
     os.remove(tmp_file_path)
 
     return render_template('result.html', text=result)
+
