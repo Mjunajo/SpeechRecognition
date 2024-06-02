@@ -7,65 +7,64 @@
     <style>
         body {
             font-family: Arial, sans-serif;
+            background-color: #f0f8ff;
+            color: #333;
+            margin: 0;
+            padding: 0;
             display: flex;
             justify-content: center;
             align-items: center;
             height: 100vh;
-            margin: 0;
-            background-color: #f0f0f0;
-            animation: fadeIn 1s ease-in-out;
+            text-align: center;
         }
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
+
+        h1 {
+            color: #007acc;
+            margin-bottom: 20px;
         }
-        .container {
-            background: white;
+
+        form {
+            background: #fff;
             padding: 20px;
             border-radius: 8px;
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-            text-align: center;
-            max-width: 600px;
-            transition: transform 0.3s ease;
         }
-        .container:hover {
-            transform: scale(1.05);
-        }
-        h1 {
-            margin-bottom: 20px;
-        }
-        p {
-            background: #f9f9f9;
+
+        input[type="file"] {
+            margin: 10px 0;
             padding: 10px;
-            border-radius: 4px;
-            word-wrap: break-word;
-            animation: slideIn 1s ease-in-out;
         }
-        @keyframes slideIn {
-            from { transform: translateY(20px); opacity: 0; }
-            to { transform: translateY(0); opacity: 1; }
-        }
-        a {
-            display: inline-block;
-            margin-top: 20px;
+
+        button {
+            background-color: #007acc;
+            color: #fff;
+            border: none;
             padding: 10px 20px;
-            background-color: #007BFF;
-            color: white;
-            text-decoration: none;
             border-radius: 4px;
-            transition: background-color 0.3s ease, transform 0.3s ease;
+            cursor: pointer;
         }
+
+        button:hover {
+            background-color: #005fa3;
+        }
+
+        p {
+            font-size: 1.2em;
+        }
+
+        a {
+            color: #007acc;
+            text-decoration: none;
+        }
+
         a:hover {
-            background-color: #0056b3;
-            transform: scale(1.05);
+            text-decoration: underline;
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <h1>Transcription Result</h1>
-        <p>{{ transcription }}</p>
-        <a href="/">Upload another file</a>
-    </div>
+    <h1>Transcription Result</h1>
+    <p>{{ text }}</p>
+    <a href="{{ url_for('index') }}">Upload another file</a>
 </body>
 </html>
