@@ -3,6 +3,7 @@ import os
 import tempfile
 from speech_recognizer import convert_audio_to_text
 from pydub import AudioSegment
+import imageio_ffmpeg as ffmpeg
 
 app = Flask(__name__)
 
@@ -24,7 +25,7 @@ def upload_file():
         if file.filename.endswith('.mp3'):
             # Convert MP3 to WAV
             audio = AudioSegment.from_mp3(file)
-            audio.export(tmp_file.name, format="wav")
+            audio.export(tmp_file.name, format="wav", codec='pcm_s16le', ffmpeg=ffmpeg.get_ffmpeg_exe())
         else:
             file.save(tmp_file.name)
         tmp_file_path = tmp_file.name
