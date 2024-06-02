@@ -23,4 +23,3 @@ def convert_audio_to_text(file_path):
     except (FileNotFoundError, ValidationError, KeyError, replicate.exceptions.ReplicateError) as e:
         # Handle file or data validation errors
         return f"Error processing audio: {e}"
-
