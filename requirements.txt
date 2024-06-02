@@ -5,3 +5,4 @@ python-dotenv==0.19.2
 werkzeug==2.0.3
 requests==2.27.1
 urllib3==1.26.6
+simplejson==3.17.6
