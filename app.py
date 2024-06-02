@@ -5,6 +5,10 @@ from speech_recognizer import convert_audio_to_text
 
 app = Flask(__name__)
 
+# Ensure static directory exists
+if not os.path.exists('static'):
+    os.makedirs('static')
+
 @app.route('/')
 def index():
     return render_template('index.html')
