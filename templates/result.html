@@ -4,56 +4,44 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Conversion Result</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
     <style>
         body {
+            background-color: #f8f9fa;
             font-family: Arial, sans-serif;
-            background-color: #f4f4f9;
-            color: #333;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            margin: 0;
         }
         .container {
-            background: #fff;
-            padding: 2rem;
+            margin-top: 50px;
+        }
+        .card {
+            padding: 20px;
             border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        .footer {
+            margin-top: 50px;
             text-align: center;
-        }
-        h1 {
-            margin-bottom: 1.5rem;
-            color: #007BFF;
-        }
-        p {
-            background: #f4f4f9;
-            padding: 1rem;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            text-align: left;
-            word-wrap: break-word;
-        }
-        a {
-            display: inline-block;
-            margin-top: 1rem;
-            text-decoration: none;
-            color: #007BFF;
-            padding: 0.5rem 1rem;
-            border: 1px solid #007BFF;
-            border-radius: 5px;
-        }
-        a:hover {
-            background-color: #007BFF;
-            color: white;
+            color: #6c757d;
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>Converted Text</h1>
-        <p>{{ text }}</p>
-        <a href="/">Convert Another Audio</a>
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <div class="card">
+                    <h2 class="text-center">Conversion Result</h2>
+                    <p class="lead">{{ text }}</p>
+                    <div class="text-center">
+                        <a href="/" class="btn btn-primary">Convert Another File</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="footer">
+        <p>&copy; 2024 Audio to Text Converter</p>
     </div>
 </body>
 </html>
