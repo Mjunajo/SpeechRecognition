@@ -2,7 +2,6 @@ import replicate
 import os
 from dotenv import load_dotenv
 from pydantic import BaseModel, ValidationError
-from datetime import datetime
 
 load_dotenv()
 REPLICATE_API_TOKEN = os.getenv("REPLICATE_API_TOKEN")
