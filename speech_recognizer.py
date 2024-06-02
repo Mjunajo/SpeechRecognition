@@ -1,20 +1,16 @@
-import whisper
+# speech_recognizer.py
+import replicate
 import os
-import subprocess
+from dotenv import load_dotenv
 
-class SpeechRecognizer:
-    def __init__(self, model_name='base'):
-        self.model = whisper.load_model(model_name)
-    
-    def transcribe(self, audio_path):
-        # Convert mp3 to wav if needed
-        if audio_path.endswith('.mp3'):
-            wav_path = audio_path.replace('.mp3', '.wav')
-            self.convert_mp3_to_wav(audio_path, wav_path)
-            audio_path = wav_path
-        
-        result = self.model.transcribe(audio_path)
-        return result['text']
-    
-    def convert_mp3_to_wav(self, mp3_path, wav_path):
-        subprocess.run(['ffmpeg', '-i', mp3_path, wav_path], check=True)
+load_dotenv()
+REPLICATE_API_TOKEN = os.getenv("REPLICATE_API_TOKEN")
+
+def convert_audio_to_text(file_path):
+    model = replicate.Client(api_token=REPLICATE_API_TOKEN)
+    input = {"audio": open(file_path, "rb")}
+    output = model.run(
+        "openai/whisper:4d50797290df275329f202e48c76360b3f22b08d28c196cbc54600319435f8d2",
+        input=input
+    )
+    return output["segments"][0]["text"]
