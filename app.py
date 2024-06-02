@@ -1,13 +1,10 @@
 # app.py
 from flask import Flask, render_template, request, redirect, url_for
 import os
+import tempfile
 from speech_recognizer import convert_audio_to_text
 
 app = Flask(__name__)
-
-# Ensure static directory exists
-if not os.path.exists('static'):
-    os.makedirs('static')
 
 @app.route('/')
 def index():
@@ -23,11 +20,14 @@ def upload_file():
         return redirect(url_for('index'))
 
     # Save file temporarily
-    file_path = os.path.join("static", file.filename)
-    file.save(file_path)
+    with tempfile.NamedTemporaryFile(delete=False) as tmp_file:
+        file.save(tmp_file.name)
+        tmp_file_path = tmp_file.name
 
     # Convert audio to text using the speech recognizer
-    result = convert_audio_to_text(file_path)
-    os.remove(file_path)  # Remove the temporary file after processing
+    result = convert_audio_to_text(tmp_file_path)
+    
+    # Clean up the temporary file
+    os.remove(tmp_file_path)
 
     return render_template('result.html', text=result)
